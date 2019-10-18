@@ -1,0 +1,28 @@
+version: '3'
+services:
+    mediawiki:
+        image: chasse20/mediawiki
+        build: .
+        container_name: mediawiki
+        restart: always
+        volumes:
+         - 'data:/var/www/html'
+        ports:
+         - 10.10.3.23:80:80
+        networks:
+         - wiki
+    parsoid:
+        image: thenets/parsoid:0.8
+        container_name: parsoid
+        restart: always
+        environment:
+         - PARSOID_DOMAIN_localhost=http://10.10.3.23/api.php
+        ports:
+         - 10.10.3.23:8000:8000
+        networks:
+         - wiki
+volumes:
+    data:
+        driver: local
+networks:
+    wiki:
